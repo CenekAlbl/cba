@@ -1,6 +1,9 @@
-#include <cmpba.h>
+#include <cba.h>
+#include <perspective_projection.h>
 
 namespace cba {
+
+	constexpr int PerspectiveProjection::blockSizes_[];
 
 	ceres::CostFunction * PerspectiveProjection::getCostFunction(double const * const obsv, double weight, double const * const data) const
 	{
@@ -26,8 +29,8 @@ namespace cba {
 		y = rotatedX[1] / rotatedX[2];
 		x = k[0] * x + k[4] * y + k[2];
 		y = k[1] * y + k[3];
-		residuals[0] = T(weights_[0])*(T(obsv_[0]) - x);
-		residuals[1] = T(weights_[1])*(T(obsv_[1]) - y);
+		residuals[0] = T(obsv_[0]) - x;
+		residuals[1] = T(obsv_[1]) - y;
 		return true;
 	}
 

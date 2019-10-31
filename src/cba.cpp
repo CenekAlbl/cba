@@ -64,7 +64,7 @@ namespace cba {
 		nObs_ = 0;
 		nProjBlocks_ = 0;
 		nParBlocks_ = 0;
-		projFuncType_ = "PerspectiveProjection";
+		projFuncType_.push_back("PerspectiveProjection");
 
 
 		parameters_ = NULL;

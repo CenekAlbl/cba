@@ -14,12 +14,12 @@ endif (EIGEN_FOUND)
 find_package(Ceres REQUIRED)
 include_directories(${CERES_INCLUDE_DIR})
 
-find_package(Matlab COMPONENTS MX_LIBRARY MEX_COMPILER)
+#find_package(Matlab COMPONENTS MX_LIBRARY MEX_COMPILER)
 
-matlab_add_mex(
-    NAME cmpba_mex
-    SRC "src/cmpba_mex.cpp"
-)
+#matlab_add_mex(
+#    NAME cmpba_mex
+#    SRC "src/cmpba_mex.cpp"
+#)
 
 
 
@@ -27,5 +27,5 @@ include_directories(
 	include
 )
 
-add_executable(cmpba src/projection.cpp src/perspective_projection.cpp src/cmpba.cpp src/main.cpp)
-target_link_libraries (cmpba Eigen3::Eigen ceres)
+add_executable(cba src/projection.cpp src/perspective_projection.cpp src/cba.cpp src/main.cpp)
+target_link_libraries (cba Eigen3::Eigen ceres)
