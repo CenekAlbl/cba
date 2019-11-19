@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
-project (cmpba)
+project (cba)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,6 +14,7 @@ endif (EIGEN_FOUND)
 find_package(Ceres REQUIRED)
 include_directories(${CERES_INCLUDE_DIR})
 
+
 #find_package(Matlab COMPONENTS MX_LIBRARY MEX_COMPILER)
 
 #matlab_add_mex(
@@ -21,11 +22,27 @@ include_directories(${CERES_INCLUDE_DIR})
 #    SRC "src/cmpba_mex.cpp"
 #)
 
-
-
 include_directories(
 	include
 )
 
-add_executable(cba src/projection.cpp src/perspective_projection.cpp src/cba.cpp src/main.cpp)
-target_link_libraries (cba Eigen3::Eigen ceres)
+add_library(cba SHARED
+  src/projection.cpp src/perspective_projection.cpp src/cba.cpp
+)
+
+target_include_directories(cba PRIVATE .)
+target_include_directories(cba PUBLIC ${EIGEN_INCLUDE_DIRS})
+
+set_target_properties(cba PROPERTIES PUBLIC_HEADER include/cba.h)
+
+include(GNUInstallDirs)
+
+install(TARGETS cba
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+
+    
+add_executable(run_cba src/main.cpp)
+
+target_link_libraries (run_cba cba Eigen3::Eigen ceres )
