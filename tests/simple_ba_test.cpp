@@ -12,6 +12,7 @@ int main(int argc, char ** argv){
     std::cout << "Cameras: " << P << "\n";
     std::cout << "Projections: " << u << "\n";
 
+    cba::CBAInterface interface;
 
 
 }

@@ -42,7 +42,12 @@ install(TARGETS cba
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 
-    
+# MAIN
 add_executable(run_cba src/main.cpp)
 
 target_link_libraries (run_cba cba Eigen3::Eigen ceres )
+
+# TESTS
+add_executable(simple_ba tests/simple_ba_test.cpp tests/generate_scene.h)
+
+target_link_libraries (simple_ba cba Eigen3::Eigen ceres )

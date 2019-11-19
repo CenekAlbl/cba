@@ -47,6 +47,12 @@ namespace cba {
 	public:
 		CBAInterface();
 
+		// Setters
+		int setParameters(double * parameters) {parameters_ = parameters;};
+		int setObservations(double * observations, int nObs) {observations_ = observations; nObs_ = nObs;};
+		int setObservations(double * observations) {observations_ = observations;};
+
+		// Getters
 		double * getParameters()  const{ return parameters_; };
 		int getNumObs() const { return nObs_; };
 		int getNumParBlocks() const;
@@ -58,6 +64,8 @@ namespace cba {
 		double getWeight(int i) const {return weights_[i];};
 		double * getAuxiliaryData(int i) const {return auxdata[i];};
 		bool getRobustify() const { return robustify_; };
+
+
 
 	private:
 
