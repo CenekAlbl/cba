@@ -98,4 +98,6 @@ namespace cba {
 
 	};
 
+	void Solve(CBAInterface interface);
+
 }
