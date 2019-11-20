@@ -21,13 +21,13 @@ namespace cba {
 
 		virtual ceres::CostFunction* getCostFunction(double const * const obsv, double weight, double const * const data = NULL) const;
 
-		virtual int getNumBlocks() const { return 4; };
-		virtual int getResidualSize() const { return 2; };
+		virtual int getNumBlocks() const { return numBlocks_; };
+		virtual int getResidualSize() const { return residualSize_; };
 		virtual const int * getBlockSizes() const { return blockSizes_; };
 		
 		~PerspectiveProjection();
 	
-		static const int numBlocks_ = 3;
+		static const int numBlocks_ = 4;
 		static const int residualSize_ = 2;
 		static constexpr int blockSizes_[] = {3,3,5,3}; 
 

@@ -45,12 +45,8 @@ namespace cba {
 
 	class DLLAPI CBAInterface {
 	public:
-		CBAInterface();
+		CBAInterface(parameters, parameterBlockPointers, observations, nObs, nProjBlocks, nParBlocks, projFuncTypes);
 
-		// Setters
-		int setParameters(double * parameters) {parameters_ = parameters;};
-		int setObservations(double * observations, int nObs) {observations_ = observations; nObs_ = nObs;};
-		int setObservations(double * observations) {observations_ = observations;};
 
 		// Getters
 		double * getParameters()  const{ return parameters_; };

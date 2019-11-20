@@ -17,13 +17,13 @@ namespace cba {
 		for (int i = 0; i < cbaInterface.getNumObs(); i++)
 		{
 			cba::Projection * projection = cba::ProjectionFactory::createProjectionInstance(cbaInterface.getProjFuncType(i));
-			ceres::CostFunction * costFunction = projection->getCostFunction(cbaInterface.getObservations(), cbaInterface.getWeight(i),cbaInterface.getAuxiliaryData(i));
+			ceres::CostFunction * costFunction = projection->getCostFunction(cbaInterface.getObservations()[observationIdx], cbaInterface.getWeight(i),cbaInterface.getAuxiliaryData(i));
 
 			ceres::LossFunction *lossFunction = cbaInterface.getRobustify() ? new ceres::HuberLoss(1.0) : NULL;
 
 			// build residual blocks
 			std::vector<double *> blocks;
-			for (int j = 0; j < cbaInterface.getNumProjBlocks(); j++)
+			for (int j = 0; j < projection->getNumBlocks; j++)
 			{
 				blocks.push_back(cbaInterface.getParameters()+cbaInterface.getBlockPointers()[blockId]);
 				blockId++;
@@ -64,10 +64,10 @@ namespace cba {
 	}
 
 
-	CBAInterface::CBAInterface()
+	CBAInterface::CBAInterface(parameters, parameterBlockPointers, observations, nObs, nProjBlocks, nParBlocks, projFuncTypes)
 	{
 		useConstraints_ = false;
-		nObs_ = 0;
+		nObs_ = nObs;
 		nProjBlocks_ = 0;
 		nParBlocks_ = 0;
 		projFuncType_.push_back("PerspectiveProjection");
