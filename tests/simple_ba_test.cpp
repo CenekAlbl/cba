@@ -18,22 +18,35 @@ int main(int argc, char ** argv){
     std::cout << "Cameras: " << P1 << "\n" << P2 << "\n";
     std::cout << "Projections: " << u1 << "\n";
 
-    cba::CBAInterface interface;
+    
     double * parameters = new double[nparams];
     ceres::RotationMatrixToAngleAxis(P1.leftCols(3).data(),parameters);
     std::memcpy(P1.rightCols(1).data(),parameters+3,3);
     ceres::RotationMatrixToAngleAxis(P1.leftCols(3).data(),parameters+6);
     std::memcpy(P2.rightCols(1).data(),parameters+9,3);
+    std::memcpy(X.data(),parameters + 12,npts*3);
     Eigen::MatrixXd observations(2,nobs);
     observations << u1, u2;
     
-    interface.setParameters(parameters);
-    interface.setObservations(observations.data());
-    for (int i = 0; i < nobs; i++)
+    std::vector<std::string> projFuncs;
+    std::vector<int> parameterBlockPointers; 
+    for (int i = 0; i < int(nobs/2); i++)
     {
-        interface.addProjFuncType("PerspectiveProjection");
+        projFuncs.push_back(("PerspectiveProjection"));
+        parameterBlockPointers.push_back(0); // camera 1 rotation
+        parameterBlockPointers.push_back(3); // camera 1 translation
+        parameterBlockPointers.push_back(12+i*3); // 3D point
+    }
+
+    for (int i = 0; i < int(nobs/2); i++)
+    {
+        projFuncs.push_back(("PerspectiveProjection"));
+        parameterBlockPointers.push_back(6); // camera 2 rotation
+        parameterBlockPointers.push_back(9); // camera 2 translation
+        parameterBlockPointers.push_back(12+i*3); // 3D point
     }
     
+    cba::CBAInterface  interface(parameters,  parameterBlockPointers.data(),  (double *)observations.data(), nobs, projFuncs);
 
     cba::Solve(interface);
 

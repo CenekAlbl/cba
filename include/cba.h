@@ -45,17 +45,14 @@ namespace cba {
 
 	class DLLAPI CBAInterface {
 	public:
-		CBAInterface(parameters, parameterBlockPointers, observations, nObs, nProjBlocks, nParBlocks, projFuncTypes);
+		CBAInterface( double * parameters, int * parameterBlockPointers, double * observations, int nObs, std::vector<std::string> projFuncTypes);
 
 
 		// Getters
 		double * getParameters()  const{ return parameters_; };
 		int getNumObs() const { return nObs_; };
-		int getNumParBlocks() const;
-		int getNumProjBlocks() const { return nProjBlocks_; };
 		int * getBlockPointers() const { return blockPointers_; };
-		std::string getProjFuncType(int i) const { return projFuncType_[i]; };
-		std::vector<int> getBlockCount() const { return blockCount_; };
+		std::string getProjFuncType(int i) const { return projFuncTypes_[i]; };
 		double * getObservations() const {return observations_; };
 		double getWeight(int i) const {return weights_[i];};
 		double * getAuxiliaryData(int i) const {return auxdata[i];};
@@ -67,10 +64,7 @@ namespace cba {
 
 		bool useConstraints_;
 		int nObs_;
-		int nParBlocks_;
-		int nProjBlocks_;
-		std::vector<int> blockCount_;
-		std::vector<std::string> projFuncType_;
+		std::vector<std::string> projFuncTypes_;
 
 
 		double * parameters_;
