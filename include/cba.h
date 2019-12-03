@@ -54,10 +54,11 @@ namespace cba {
 		int * getBlockPointers() const { return blockPointers_; };
 		std::string getProjFuncType(int i) const { return projFuncTypes_[i]; };
 		double * getObservations() const {return observations_; };
-		double getWeight(int i) const {return weights_[i];};
-		double * getAuxiliaryData(int i) const {return auxdata[i];};
+		double getWeight(int i) const {  return (weights_ == NULL) ? 1 : weights_[i];};
+		double * getAuxiliaryData(int i) const { return (auxdata_.size() == 0) ? NULL : auxdata_[i];};
 		bool getRobustify() const { return robustify_; };
 
+		bool sanityCheck();
 
 
 	private:
@@ -75,7 +76,7 @@ namespace cba {
 		double * weights_;
 		int* blockPointers_;
 		int* parmask_;
-		std::vector<double *> auxdata;
+		std::vector<double *> auxdata_;
 
 		// options
 		int num_iterations_;

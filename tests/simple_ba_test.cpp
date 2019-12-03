@@ -21,10 +21,10 @@ int main(int argc, char ** argv){
     
     double * parameters = new double[nparams];
     ceres::RotationMatrixToAngleAxis(P1.leftCols(3).data(),parameters);
-    std::memcpy(P1.rightCols(1).data(),parameters+3,3);
-    ceres::RotationMatrixToAngleAxis(P1.leftCols(3).data(),parameters+6);
-    std::memcpy(P2.rightCols(1).data(),parameters+9,3);
-    std::memcpy(X.data(),parameters + 12,npts*3);
+    std::memcpy(parameters+3,P1.rightCols(1).data(),3*sizeof(double));
+    ceres::RotationMatrixToAngleAxis(P2.leftCols(3).data(),parameters+6);
+    std::memcpy(parameters+9,P2.rightCols(1).data(),3*sizeof(double));
+    std::memcpy(parameters + 12,X.data(),npts*3*sizeof(double));
     Eigen::MatrixXd observations(2,nobs);
     observations << u1, u2;
     
@@ -32,7 +32,7 @@ int main(int argc, char ** argv){
     std::vector<int> parameterBlockPointers; 
     for (int i = 0; i < int(nobs/2); i++)
     {
-        projFuncs.push_back(("PerspectiveProjection"));
+        projFuncs.push_back(("CalibratedPerspectiveProjection"));
         parameterBlockPointers.push_back(0); // camera 1 rotation
         parameterBlockPointers.push_back(3); // camera 1 translation
         parameterBlockPointers.push_back(12+i*3); // 3D point
@@ -40,7 +40,7 @@ int main(int argc, char ** argv){
 
     for (int i = 0; i < int(nobs/2); i++)
     {
-        projFuncs.push_back(("PerspectiveProjection"));
+        projFuncs.push_back(("CalibratedPerspectiveProjection"));
         parameterBlockPointers.push_back(6); // camera 2 rotation
         parameterBlockPointers.push_back(9); // camera 2 translation
         parameterBlockPointers.push_back(12+i*3); // 3D point

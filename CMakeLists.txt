@@ -27,7 +27,7 @@ include_directories(
 )
 
 add_library(cba SHARED
-  src/projection.cpp src/perspective_projection.cpp src/cba.cpp
+  src/projection.cpp src/perspective_projection.cpp src/calibrated_perspective_projection.cpp src/cba.cpp
 )
 
 target_include_directories(cba PRIVATE .)

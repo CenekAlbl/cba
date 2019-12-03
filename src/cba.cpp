@@ -16,16 +16,27 @@ namespace cba {
 		int observationIdx = 0;
 		for (int i = 0; i < cbaInterface.getNumObs(); i++)
 		{
+			std::cout << "Filling up observation: " << i << "\n";
 			cba::Projection * projection = cba::ProjectionFactory::createProjectionInstance(cbaInterface.getProjFuncType(i));
+			std::cout << "Create cost function: " << i << "\n";
 			ceres::CostFunction * costFunction = projection->getCostFunction(cbaInterface.getObservations() + observationIdx, cbaInterface.getWeight(i),cbaInterface.getAuxiliaryData(i));
-
+			std::cout << "Lossfunction: " << i << "\n";	
 			ceres::LossFunction *lossFunction = cbaInterface.getRobustify() ? new ceres::HuberLoss(1.0) : NULL;
 
 			// build residual blocks
 			std::vector<double *> blocks;
 			for (int j = 0; j < projection->getNumBlocks(); j++)
 			{
+				std::cout << "Filling up block: " << blockId;
+				std::cout << " with block pointer " << cbaInterface.getBlockPointers()[blockId];
 				blocks.push_back(cbaInterface.getParameters()+cbaInterface.getBlockPointers()[blockId]);
+				std::cout << " with ";
+				for (int k = 0; k < projection->getBlockSizes()[j]; k++)
+				{
+					std::cout << blocks.back()[k] << " ";
+				}
+				std::cout << "\n";
+				
 				blockId++;
 			}
 
@@ -89,8 +100,6 @@ namespace cba {
 		verbose_  = false;
 
 	}
-
-
 	
 }
 
